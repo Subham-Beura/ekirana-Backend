@@ -1,3 +1,5 @@
+const jwt=require('jsonwebtoken')
+
 const User = require("../models/User");
 
 
@@ -27,12 +29,13 @@ async function login(req, res) {
             res.json({ msg: "wrong Password", given: userDetails });
 
         //Ideal
-        res.json({ msg: "Logged In", ...userFound, });
+        let token
+        token= jwt.sign(userDetails,"Secret Key",{expiresIn:'1h'})
+        console.log(token)
+        res.json({ msg: "Logged In", user:{userFound,token:token}, });
 
-    } catch {
-        err => {
+    } catch (err) {
             console.log(err);
         };
-    }
 }
 exports.login = login;
