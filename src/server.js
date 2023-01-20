@@ -3,7 +3,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
-const auth = require('./auth')
+const auth = require('./Routes/authRoutes')
 
 const app = express()
 
