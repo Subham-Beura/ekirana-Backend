@@ -5,7 +5,7 @@ const authController_1 = require("../controller/authController");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 router.get("/", auth_1.auth, authController_1.getAllUsers);
-router.post("/register", auth_1.auth, authController_1.register);
+router.post("/register", authController_1.register);
 router.post("/login", authController_1.login);
 router.post("/changepassword/:emp_id", auth_1.auth, authController_1.changePassword);
 exports.default = router;
