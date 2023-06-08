@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
 const auth_1 = require("./middleware/auth");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
@@ -33,6 +34,7 @@ app.use(function (req, res, next) {
     next();
 });
 app.use("/auth", authRoutes_1.default);
+app.use("/products", productRoutes_1.default);
 app.use(auth_1.auth);
 app.use("/user", userRoutes_1.default);
 app.listen(port, () => {

@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import productRoutes from "./routes/productRoutes";
 import { auth } from "./middleware/auth";
 const app: Express = express();
 const port = process.env.PORT || 4000;
@@ -33,6 +34,7 @@ app.use(function (req, res, next) {
 });
 
 app.use("/auth", authRoutes);
+app.use("/products", productRoutes);
 app.use(auth);
 app.use("/user", userRoutes);
 
