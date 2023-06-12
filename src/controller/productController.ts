@@ -5,7 +5,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
   console.log(productList);
   res.setHeader("Content-Type", "application/json");
   if (!productList) {
-    res.json(null).sendStatus(200);
+    res.json({ msg: "No Products Found" }).sendStatus(200);
   }
   res.json({ msg: "Hello World" });
 };

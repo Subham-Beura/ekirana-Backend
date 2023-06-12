@@ -19,7 +19,7 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     console.log(productList);
     res.setHeader("Content-Type", "application/json");
     if (!productList) {
-        res.json(null).sendStatus(200);
+        res.json({ msg: "No Products Found" }).sendStatus(200);
     }
     res.json({ msg: "Hello World" });
 });
