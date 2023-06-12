@@ -11,11 +11,3 @@ describe("Hello World", () => {
     expect(res.text).toEqual("Hello World");
   });
 });
-
-let server: any;
-beforeAll(() => {
-  server = app.listen(4001); // Random number is needed to avoid using same port in different tests if you run in parallel
-});
-afterAll(() => {
-  server.close();
-});

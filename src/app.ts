@@ -16,11 +16,10 @@ app.use(bodyParser.json());
 app.use(cors());
 // mongoose.connect("mongodb://localhost:27016/PSS");
 const dbURL: string | undefined = process.env.MONGODB_ATLAS_URL;
-if (typeof dbURL == "string")
-  mongoose.connect(dbURL).then(() => {
-    console.log("Connected To DB");
-  });
-else console.log("DB URL not found");
+if (typeof dbURL == "string") {
+  mongoose.connect(dbURL);
+  console.log("Database connected");
+} else console.log("DB URL not found");
 mongoose.set("strictQuery", false);
 app.use(function (req, res, next) {
   //Enabling CORS
