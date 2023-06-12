@@ -4,7 +4,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
   const productList = await Product.find();
   res.setHeader("Content-Type", "application/json");
   if (!productList) {
-    res.json({ msg: "No Products Found" }).sendStatus(200);
+    res.json({ msg: "No Products Found" }).sendStatus(404);
   }
   res.json({ succes: true, data: productList });
 };

@@ -18,7 +18,7 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const productList = yield ProductModel_1.default.find();
     res.setHeader("Content-Type", "application/json");
     if (!productList) {
-        res.json({ msg: "No Products Found" }).sendStatus(200);
+        res.json({ msg: "No Products Found" }).sendStatus(404);
     }
     res.json({ succes: true, data: productList });
 });
