@@ -1,9 +1,6 @@
 import request from "supertest";
 import app from "../../app";
 import { returnRandomString } from "../../utlis/returnRandomString";
-beforeAll(() => {
-  jest.setTimeout(60000);
-});
 describe("Test the Product Path", () => {
   describe("GET /products : Get all Products", () => {
     it("Get 200 Status code on success", async () => {

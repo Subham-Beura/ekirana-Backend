@@ -15,9 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
 const returnRandomString_1 = require("../../utlis/returnRandomString");
-beforeAll(() => {
-    jest.setTimeout(60000);
-});
 describe("Test the Product Path", () => {
     describe("GET /products : Get all Products", () => {
         it("Get 200 Status code on success", () => __awaiter(void 0, void 0, void 0, function* () {
