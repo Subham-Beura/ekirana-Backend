@@ -8,5 +8,5 @@ import {
 const router = Router();
 router.get("/", getAllProducts);
 router.post("/:p_id", getProduct);
-router.post("/create", createProduct);
+router.post("/", createProduct);
 export default router;
