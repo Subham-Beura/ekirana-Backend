@@ -16,7 +16,6 @@ exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.
 const ProductModel_1 = __importDefault(require("../models/ProductModel"));
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const productList = yield ProductModel_1.default.find();
-    console.log(productList);
     res.setHeader("Content-Type", "application/json");
     if (!productList) {
         res.json({ msg: "No Products Found" }).sendStatus(200);
@@ -28,9 +27,22 @@ const getProduct = (req, res) => {
     res.send("Give Product");
 };
 exports.getProduct = getProduct;
-const createProduct = (req, res) => {
-    res.send("Product Created");
-};
+const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newProduct = new ProductModel_1.default(req.body);
+    let product;
+    try {
+        product = yield newProduct.save();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500);
+    }
+    res.status(201);
+    res.json({
+        success: true,
+        data: product,
+    });
+});
 exports.createProduct = createProduct;
 const updateProduct = (req, res) => {
     res.send("Product Created");
