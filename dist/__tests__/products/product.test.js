@@ -31,8 +31,22 @@ describe("Test the Product Path", () => {
             expect(res.body.data[0]).toHaveProperty("desc");
         }));
     });
+    describe("GET /products/:id : Get a Product", () => {
+        it("Get user on Success", () => __awaiter(void 0, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default).get("/products/tester1");
+            expect(res.header["content-type"]).toMatch(/json/);
+            expect(res.status).toBe(200);
+            expect(res.body.data).toHaveProperty("p_id");
+        }));
+        it("Get 404 on User not found", () => __awaiter(void 0, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default).get("/products/p_id_not_found");
+            expect(res.header["content-type"]).toMatch(/json/);
+            expect(res.status).toBe(404);
+        }));
+    });
     describe("POST /products : Create a new Product", () => {
         it("succesfully creates a new product with staus 201", () => __awaiter(void 0, void 0, void 0, function* () {
+            //! Commneted as it would create a user every time tests are run
             // const res = await request(app)
             //   .post("/products")
             //   .send({
@@ -42,11 +56,11 @@ describe("Test the Product Path", () => {
             //     price: 100,
             //     category: "test",
             //   });
+            //
             // expect(res.status).toBe(201);
             // expect(res.body.data.name).toBe("test");
         }));
     });
     describe("PUT /products/:id : Update a Product", () => { });
     describe("DELETE /products/:id : Delete a Product", () => { });
-    describe("GET /products/:id : Get a Product", () => { });
 });

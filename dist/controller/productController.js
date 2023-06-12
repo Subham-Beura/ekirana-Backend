@@ -23,9 +23,18 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     res.json({ succes: true, data: productList });
 });
 exports.getAllProducts = getAllProducts;
-const getProduct = (req, res) => {
-    res.send("Give Product");
-};
+const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const p_id = req.params.p_id;
+    let user = yield ProductModel_1.default.findOne({ p_id: p_id });
+    res.setHeader("Content-Type", "application/json");
+    // If Product not found
+    if (!user) {
+        res.status(404);
+        res.setHeader("Content-Type", "application/json");
+        return res.json({ succes: false, msg: "No Product Found" });
+    }
+    res.json({ succes: true, data: user });
+});
 exports.getProduct = getProduct;
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newProduct = new ProductModel_1.default(req.body);
