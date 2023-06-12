@@ -6,7 +6,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
   if (!productList) {
     res.json({ msg: "No Products Found" }).sendStatus(200);
   }
-  res.json({ msg: "Hello World" });
+  res.json({ succes: true, data: productList });
 };
 export const getProduct = (req: Request, res: Response) => {
   res.send("Give Product");

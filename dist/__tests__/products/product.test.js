@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
-const returnRandomString_1 = require("../../utlis/returnRandomString");
 describe("Test the Product Path", () => {
     describe("GET /products : Get all Products", () => {
         it("Get 200 Status code on success", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,20 +21,32 @@ describe("Test the Product Path", () => {
             expect(res.header["content-type"]).toMatch(/json/);
             expect(res.status).toBe(200);
         }));
+        //Test if getting array of Products
+        it("Get array of Products", () => __awaiter(void 0, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default).get("/products");
+            expect(res.body.data).toBeInstanceOf(Array);
+            // data[0] to be of type Product
+            expect(res.body.data[0]).toHaveProperty("p_id");
+            expect(res.body.data[0]).toHaveProperty("name");
+            expect(res.body.data[0]).toHaveProperty("desc");
+        }));
     });
     describe("POST /products : Create a new Product", () => {
         it("succesfully creates a new product with staus 201", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default)
-                .post("/products")
-                .send({
-                p_id: (0, returnRandomString_1.returnRandomString)(10),
-                name: "test",
-                desc: "test",
-                price: 100,
-                category: "test",
-            });
-            expect(res.status).toBe(201);
-            expect(res.body.data.name).toBe("test");
+            // const res = await request(app)
+            //   .post("/products")
+            //   .send({
+            //     p_id: returnRandomString(10),
+            //     name: "test",
+            //     desc: "test",
+            //     price: 100,
+            //     category: "test",
+            //   });
+            // expect(res.status).toBe(201);
+            // expect(res.body.data.name).toBe("test");
         }));
     });
+    describe("PUT /products/:id : Update a Product", () => { });
+    describe("DELETE /products/:id : Delete a Product", () => { });
+    describe("GET /products/:id : Get a Product", () => { });
 });

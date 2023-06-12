@@ -20,7 +20,7 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     if (!productList) {
         res.json({ msg: "No Products Found" }).sendStatus(200);
     }
-    res.json({ msg: "Hello World" });
+    res.json({ succes: true, data: productList });
 });
 exports.getAllProducts = getAllProducts;
 const getProduct = (req, res) => {
