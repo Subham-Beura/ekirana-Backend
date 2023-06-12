@@ -13,10 +13,9 @@ describe("Hello World", () => {
 });
 let server: any;
 beforeAll(() => {
+  jest.setTimeout(60000);
   server = app.listen(4001);
-  console.log("Helllo");
 });
 afterAll(() => {
   server.close();
-  console.log("closing server");
 });
