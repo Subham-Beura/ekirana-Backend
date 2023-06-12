@@ -13,23 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const app_1 = __importDefault(require("../app"));
-describe("Hello World", () => {
-    it("return status 200", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app_1.default).get("/");
-        expect(res.statusCode).toEqual(200);
-    }));
-    it("return Hello World", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield (0, supertest_1.default)(app_1.default).get("/");
-        expect(res.text).toEqual("Hello World");
-    }));
-});
-let server;
-beforeAll(() => {
-    server = app_1.default.listen(4001);
-    console.log("Helllo");
-});
-afterAll(() => {
-    server.close();
-    console.log("closing server");
+const app_1 = __importDefault(require("../../app"));
+describe("Test the Product Path", () => {
+    describe("GET /products : Get all Products", () => {
+        it("Get 200 Status code on success", () => __awaiter(void 0, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default).get("/products");
+            expect(res.header["content-type"]).toMatch(/json/);
+            expect(res.status).toBe(200);
+        }));
+    });
 });

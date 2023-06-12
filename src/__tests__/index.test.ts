@@ -11,3 +11,12 @@ describe("Hello World", () => {
     expect(res.text).toEqual("Hello World");
   });
 });
+let server: any;
+beforeAll(() => {
+  server = app.listen(4001);
+  console.log("Helllo");
+});
+afterAll(() => {
+  server.close();
+  console.log("closing server");
+});

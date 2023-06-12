@@ -18,10 +18,10 @@ app.use(body_parser_1.default.json());
 app.use((0, cors_1.default)());
 // mongoose.connect("mongodb://localhost:27016/PSS");
 const dbURL = process.env.MONGODB_ATLAS_URL;
-if (typeof dbURL == "string")
-    mongoose_1.default.connect(dbURL).then(() => {
-        // console.log("Connected To DB");
-    });
+if (typeof dbURL == "string") {
+    mongoose_1.default.connect(dbURL);
+    console.log("Database connected");
+}
 else
     console.log("DB URL not found");
 mongoose_1.default.set("strictQuery", false);

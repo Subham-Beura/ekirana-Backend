@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
-
-export const getAllProducts = (req: Request, res: Response) => {
-  res.send("Hello World");
+import Product from "../models/ProductModel";
+export const getAllProducts = async (req: Request, res: Response) => {
+  const productList = await Product.find();
+  console.log(productList);
+  res.setHeader("Content-Type", "application/json");
+  if (!productList) {
+    res.json(null).sendStatus(200);
+  }
+  res.json({ msg: "Hello World" });
 };
 export const getProduct = (req: Request, res: Response) => {
   res.send("Give Product");
