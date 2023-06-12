@@ -32,6 +32,7 @@ describe("Test the Product Path", () => {
 
     it("Get 404 on User not found", async () => {
       const res = await request(app).get("/products/p_id_not_found");
+
       expect(res.header["content-type"]).toMatch(/json/);
       expect(res.status).toBe(404);
     });
