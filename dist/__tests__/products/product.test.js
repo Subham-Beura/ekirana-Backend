@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
+const returnRandomString_1 = require("../../utlis/returnRandomString");
 describe("Test the Product Path", () => {
     describe("GET /products : Get all Products", () => {
         it("Get 200 Status code on success", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,6 +62,20 @@ describe("Test the Product Path", () => {
             // expect(res.body.data.name).toBe("test");
         }));
     });
-    describe("PUT /products/:id : Update a Product", () => { });
+    describe("PUT /products/:id : Update a Product", () => {
+        // it should return 200 on success
+        it("succesfully updates a product with staus 200", () => __awaiter(void 0, void 0, void 0, function* () {
+            let newObject = { desc: (0, returnRandomString_1.returnRandomString)(10) };
+            const res = yield (0, supertest_1.default)(app_1.default).put("/products/tester1").send(newObject);
+            expect(res.status).toBe(200);
+            expect(res.header["content-type"]).toMatch(/json/);
+            expect(res.body.data.desc).toBe(newObject.desc);
+        }));
+        it("shoudl return 404 on product not found", () => __awaiter(void 0, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default).put("/products/p_id_not_found").send({});
+            expect(res.status).toBe(404);
+            expect(res.header["content-type"]).toMatch(/json/);
+        }));
+    });
     describe("DELETE /products/:id : Delete a Product", () => { });
 });

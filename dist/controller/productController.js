@@ -53,9 +53,18 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 exports.createProduct = createProduct;
-const updateProduct = (req, res) => {
-    res.send("Product Created");
-};
+const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const p_id = req.params.p_id;
+    const product = yield ProductModel_1.default.findOneAndUpdate({ p_id }, req.body, {
+        new: true,
+    });
+    // User Not found
+    if (!product)
+        return res.status(404).json({ succes: false, msg: "Product not found" });
+    product === null || product === void 0 ? void 0 : product.save();
+    res.status(200);
+    res.json({ success: true, data: product });
+});
 exports.updateProduct = updateProduct;
 const deleteProduct = (req, res) => {
     res.send("Product Deleted");

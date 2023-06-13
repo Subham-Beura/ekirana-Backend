@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../../app";
 import { returnRandomString } from "../../utlis/returnRandomString";
+import Product from "../../types/ProductType";
 describe("Test the Product Path", () => {
   describe("GET /products : Get all Products", () => {
     it("Get 200 Status code on success", async () => {
@@ -56,6 +57,23 @@ describe("Test the Product Path", () => {
     });
   });
 
-  describe("PUT /products/:id : Update a Product", () => {});
+  describe("PUT /products/:id : Update a Product", () => {
+    // it should return 200 on success
+    it("succesfully updates a product with staus 200", async () => {
+      let newObject = { desc: returnRandomString(10) };
+
+      const res = await request(app).put("/products/tester1").send(newObject);
+
+      expect(res.status).toBe(200);
+      expect(res.header["content-type"]).toMatch(/json/);
+      expect(res.body.data.desc).toBe(newObject.desc);
+    });
+    it("shoudl return 404 on product not found", async () => {
+      const res = await request(app).put("/products/p_id_not_found").send({});
+
+      expect(res.status).toBe(404);
+      expect(res.header["content-type"]).toMatch(/json/);
+    });
+  });
   describe("DELETE /products/:id : Delete a Product", () => {});
 });

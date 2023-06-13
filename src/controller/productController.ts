@@ -39,8 +39,20 @@ export const createProduct = async (req: Request, res: Response) => {
   });
 };
 
-export const updateProduct = (req: Request, res: Response) => {
-  res.send("Product Created");
+export const updateProduct = async (req: Request, res: Response) => {
+  const p_id = req.params.p_id;
+
+  const product = await Product.findOneAndUpdate({ p_id }, req.body, {
+    new: true,
+  });
+
+  // User Not found
+  if (!product)
+    return res.status(404).json({ succes: false, msg: "Product not found" });
+
+  product?.save();
+  res.status(200);
+  res.json({ success: true, data: product });
 };
 export const deleteProduct = (req: Request, res: Response) => {
   res.send("Product Deleted");
