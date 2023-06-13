@@ -66,7 +66,16 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.json({ success: true, data: product });
 });
 exports.updateProduct = updateProduct;
-const deleteProduct = (req, res) => {
-    res.send("Product Deleted");
-};
+const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const p_id = req.params.p_id;
+    const product = yield ProductModel_1.default.findOneAndDelete({ p_id }).exec();
+    if (!product)
+        return res.status(404).json({ succes: false, msg: "Product not found" });
+    res.setHeader("Content-Type", "application/json");
+    res.status(200);
+    res.json({
+        success: true,
+        data: product,
+    });
+});
 exports.deleteProduct = deleteProduct;

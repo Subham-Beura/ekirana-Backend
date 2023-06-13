@@ -47,19 +47,20 @@ describe("Test the Product Path", () => {
     });
     describe("POST /products : Create a new Product", () => {
         it("succesfully creates a new product with staus 201", () => __awaiter(void 0, void 0, void 0, function* () {
-            //! Commneted as it would create a user every time tests are run
-            // const res = await request(app)
-            //   .post("/products")
-            //   .send({
-            //     p_id: returnRandomString(10),
-            //     name: "test",
-            //     desc: "test",
-            //     price: 100,
-            //     category: "test",
-            //   });
-            //
-            // expect(res.status).toBe(201);
-            // expect(res.body.data.name).toBe("test");
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .post("/products")
+                .send({
+                p_id: (0, returnRandomString_1.returnRandomString)(10),
+                name: "test",
+                desc: "test",
+                price: 100,
+                category: "test",
+            });
+            expect(res.status).toBe(201);
+            expect(res.body.data.name).toBe("test");
+            // Delete the new Document
+            const deleteRes = yield (0, supertest_1.default)(app_1.default).delete(`/products/${res.body.data.p_id}`);
+            expect(deleteRes.status).toBe(200);
         }));
     });
     describe("PUT /products/:id : Update a Product", () => {
@@ -77,5 +78,33 @@ describe("Test the Product Path", () => {
             expect(res.header["content-type"]).toMatch(/json/);
         }));
     });
-    describe("DELETE /products/:id : Delete a Product", () => { });
+    describe("DELETE /products/:id : Delete a Product", () => {
+        it("should return 200 on successful deletion", () => __awaiter(void 0, void 0, void 0, function* () {
+            const newProduct = {
+                p_id: (0, returnRandomString_1.returnRandomString)(10),
+                name: "test",
+                desc: "test",
+                price: 100,
+                category: "test",
+                seller: "owner",
+                colors: ["red", "black"],
+                stock: 100,
+            };
+            // Create a new Product
+            const res = yield (0, supertest_1.default)(app_1.default).post("/products").send(newProduct);
+            // Delete said Product
+            const deleteRes = yield (0, supertest_1.default)(app_1.default).delete(`/products/${newProduct.p_id}`);
+            // Get said Product to check if it was deleted
+            const getRes = yield (0, supertest_1.default)(app_1.default).get(`/products/${newProduct.p_id}`);
+            expect(res.status).toBe(201);
+            expect(deleteRes.status).toBe(200);
+            expect(deleteRes.header["content-type"]).toMatch(/json/);
+            expect(getRes.status).toBe(404);
+        }));
+        it("should return 404 on product not found", () => __awaiter(void 0, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default).delete(`/products/p_id_not_found`);
+            expect(res.status).toBe(404);
+            expect(res.header["content-type"]).toMatch(/json/);
+        }));
+    });
 });

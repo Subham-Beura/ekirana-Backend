@@ -54,6 +54,15 @@ export const updateProduct = async (req: Request, res: Response) => {
   res.status(200);
   res.json({ success: true, data: product });
 };
-export const deleteProduct = (req: Request, res: Response) => {
-  res.send("Product Deleted");
+export const deleteProduct = async (req: Request, res: Response) => {
+  const p_id = req.params.p_id;
+  const product = await Product.findOneAndDelete({ p_id }).exec();
+  if (!product)
+    return res.status(404).json({ succes: false, msg: "Product not found" });
+  res.setHeader("Content-Type", "application/json");
+  res.status(200);
+  res.json({
+    success: true,
+    data: product,
+  });
 };
