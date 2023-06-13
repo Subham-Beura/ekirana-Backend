@@ -47,15 +47,17 @@ describe("Test the Product Path", () => {
     });
     describe("POST /products : Create a new Product", () => {
         it("succesfully creates a new product with staus 201", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default)
-                .post("/products")
-                .send({
+            const newProduct = {
                 p_id: (0, returnRandomString_1.returnRandomString)(10),
                 name: "test",
                 desc: "test",
                 price: 100,
                 category: "test",
-            });
+                seller: "owner",
+                colors: ["red", "black"],
+                stock: 100,
+            };
+            const res = yield (0, supertest_1.default)(app_1.default).post("/products").send(newProduct);
             expect(res.status).toBe(201);
             expect(res.body.data.name).toBe("test");
             // Delete the new Document

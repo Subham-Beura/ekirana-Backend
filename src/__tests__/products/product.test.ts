@@ -42,15 +42,18 @@ describe("Test the Product Path", () => {
 
   describe("POST /products : Create a new Product", () => {
     it("succesfully creates a new product with staus 201", async () => {
-      const res = await request(app)
-        .post("/products")
-        .send({
-          p_id: returnRandomString(10),
-          name: "test",
-          desc: "test",
-          price: 100,
-          category: "test",
-        });
+      const newProduct: Product = {
+        p_id: returnRandomString(10),
+        name: "test",
+        desc: "test",
+        price: 100,
+        category: "test",
+        seller: "owner",
+        colors: ["red", "black"],
+        stock: 100,
+      };
+
+      const res = await request(app).post("/products").send(newProduct);
 
       expect(res.status).toBe(201);
       expect(res.body.data.name).toBe("test");
