@@ -3,16 +3,34 @@ import app from "../../app";
 import { returnRandomString } from "../../utlis/returnRandomString";
 import Product from "../../types/ProductType";
 describe("Test the Product Path", () => {
+  let jwtToken: string = "";
+
+  beforeAll(async () => {
+    const res = await request(app).post("/auth/login").send({
+      emailID: "admin@utsav.com",
+      password: "admin",
+    });
+    jwtToken = res.body.token;
+  });
+
+  it("jwt token is acceptable", () => {
+    expect(jwtToken).not.toBe("");
+    expect(jwtToken).not.toBeFalsy();
+  });
+
   describe("GET /products : Get all Products", () => {
     it("Get 200 Status code on success", async () => {
-      const res = await request(app).get("/products");
-
+      const res = await request(app)
+        .get("/products")
+        .set("Authorization", `Bearer ${jwtToken}`);
       expect(res.header["content-type"]).toMatch(/json/);
       expect(res.status).toBe(200);
     });
     //Test if getting array of Products
     it("Get array of Products", async () => {
-      const res = await request(app).get("/products");
+      const res = await request(app)
+        .get("/products")
+        .set("Authorization", `Bearer ${jwtToken}`);
 
       expect(res.body.data).toBeInstanceOf(Array);
       // data[0] to be of type Product
@@ -24,7 +42,9 @@ describe("Test the Product Path", () => {
 
   describe("GET /products/:id : Get a Product", () => {
     it("Get user on Success", async () => {
-      const res = await request(app).get("/products/tester1");
+      const res = await request(app)
+        .get("/products/tester1")
+        .set("Authorization", `Bearer ${jwtToken}`);
 
       expect(res.header["content-type"]).toMatch(/json/);
       expect(res.status).toBe(200);
@@ -32,7 +52,9 @@ describe("Test the Product Path", () => {
     });
 
     it("Get 404 on User not found", async () => {
-      const res = await request(app).get("/products/p_id_not_found");
+      const res = await request(app)
+        .get("/products/p_id_not_found")
+        .set("Authorization", `Bearer ${jwtToken}`);
 
       expect(res.header["content-type"]).toMatch(/json/);
       expect(res.status).toBe(404);
@@ -52,15 +74,18 @@ describe("Test the Product Path", () => {
         stock: 100,
       };
 
-      const res = await request(app).post("/products").send(newProduct);
+      const res = await request(app)
+        .post("/products")
+        .send(newProduct)
+        .set("Authorization", `Bearer ${jwtToken}`);
 
       expect(res.status).toBe(201);
       expect(res.body.data.name).toBe("test");
 
       // Delete the new Document
-      const deleteRes = await request(app).delete(
-        `/products/${res.body.data.p_id}`
-      );
+      const deleteRes = await request(app)
+        .delete(`/products/${res.body.data.p_id}`)
+        .set("Authorization", `Bearer ${jwtToken}`);
       expect(deleteRes.status).toBe(200);
     });
   });
@@ -70,14 +95,20 @@ describe("Test the Product Path", () => {
     it("succesfully updates a product with staus 200", async () => {
       let newObject = { desc: returnRandomString(10) };
 
-      const res = await request(app).put("/products/tester1").send(newObject);
+      const res = await request(app)
+        .put("/products/tester1")
+        .set("Authorization", `Bearer ${jwtToken}`)
+        .send(newObject);
 
       expect(res.status).toBe(200);
       expect(res.header["content-type"]).toMatch(/json/);
       expect(res.body.data.desc).toBe(newObject.desc);
     });
     it("shoudl return 404 on product not found", async () => {
-      const res = await request(app).put("/products/p_id_not_found").send({});
+      const res = await request(app)
+        .put("/products/p_id_not_found")
+        .set("Authorization", `Bearer ${jwtToken}`)
+        .send({});
 
       expect(res.status).toBe(404);
       expect(res.header["content-type"]).toMatch(/json/);
@@ -97,13 +128,18 @@ describe("Test the Product Path", () => {
       };
 
       // Create a new Product
-      const res = await request(app).post("/products").send(newProduct);
+      const res = await request(app)
+        .post("/products")
+        .set("Authorization", `Bearer ${jwtToken}`)
+        .send(newProduct);
       // Delete said Product
-      const deleteRes = await request(app).delete(
-        `/products/${newProduct.p_id}`
-      );
+      const deleteRes = await request(app)
+        .delete(`/products/${newProduct.p_id}`)
+        .set("Authorization", `Bearer ${jwtToken}`);
       // Get said Product to check if it was deleted
-      const getRes = await request(app).get(`/products/${newProduct.p_id}`);
+      const getRes = await request(app)
+        .get(`/products/${newProduct.p_id}`)
+        .set("Authorization", `Bearer ${jwtToken}`);
 
       expect(res.status).toBe(201);
       expect(deleteRes.status).toBe(200);
@@ -112,7 +148,9 @@ describe("Test the Product Path", () => {
     });
 
     it("should return 404 on product not found", async () => {
-      const res = await request(app).delete(`/products/p_id_not_found`);
+      const res = await request(app)
+        .delete(`/products/p_id_not_found`)
+        .set("Authorization", `Bearer ${jwtToken}`);
 
       expect(res.status).toBe(404);
       expect(res.header["content-type"]).toMatch(/json/);

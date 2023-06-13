@@ -16,15 +16,31 @@ const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
 const returnRandomString_1 = require("../../utlis/returnRandomString");
 describe("Test the Product Path", () => {
+    let jwtToken = "";
+    beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield (0, supertest_1.default)(app_1.default).post("/auth/login").send({
+            emailID: "admin@utsav.com",
+            password: "admin",
+        });
+        jwtToken = res.body.token;
+    }));
+    it("jwt token is acceptable", () => {
+        expect(jwtToken).not.toBe("");
+        expect(jwtToken).not.toBeFalsy();
+    });
     describe("GET /products : Get all Products", () => {
         it("Get 200 Status code on success", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default).get("/products");
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .get("/products")
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.header["content-type"]).toMatch(/json/);
             expect(res.status).toBe(200);
         }));
         //Test if getting array of Products
         it("Get array of Products", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default).get("/products");
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .get("/products")
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.body.data).toBeInstanceOf(Array);
             // data[0] to be of type Product
             expect(res.body.data[0]).toHaveProperty("p_id");
@@ -34,13 +50,17 @@ describe("Test the Product Path", () => {
     });
     describe("GET /products/:id : Get a Product", () => {
         it("Get user on Success", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default).get("/products/tester1");
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .get("/products/tester1")
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.header["content-type"]).toMatch(/json/);
             expect(res.status).toBe(200);
             expect(res.body.data).toHaveProperty("p_id");
         }));
         it("Get 404 on User not found", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default).get("/products/p_id_not_found");
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .get("/products/p_id_not_found")
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.header["content-type"]).toMatch(/json/);
             expect(res.status).toBe(404);
         }));
@@ -57,11 +77,16 @@ describe("Test the Product Path", () => {
                 colors: ["red", "black"],
                 stock: 100,
             };
-            const res = yield (0, supertest_1.default)(app_1.default).post("/products").send(newProduct);
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .post("/products")
+                .send(newProduct)
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.status).toBe(201);
             expect(res.body.data.name).toBe("test");
             // Delete the new Document
-            const deleteRes = yield (0, supertest_1.default)(app_1.default).delete(`/products/${res.body.data.p_id}`);
+            const deleteRes = yield (0, supertest_1.default)(app_1.default)
+                .delete(`/products/${res.body.data.p_id}`)
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(deleteRes.status).toBe(200);
         }));
     });
@@ -69,13 +94,19 @@ describe("Test the Product Path", () => {
         // it should return 200 on success
         it("succesfully updates a product with staus 200", () => __awaiter(void 0, void 0, void 0, function* () {
             let newObject = { desc: (0, returnRandomString_1.returnRandomString)(10) };
-            const res = yield (0, supertest_1.default)(app_1.default).put("/products/tester1").send(newObject);
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .put("/products/tester1")
+                .set("Authorization", `Bearer ${jwtToken}`)
+                .send(newObject);
             expect(res.status).toBe(200);
             expect(res.header["content-type"]).toMatch(/json/);
             expect(res.body.data.desc).toBe(newObject.desc);
         }));
         it("shoudl return 404 on product not found", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default).put("/products/p_id_not_found").send({});
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .put("/products/p_id_not_found")
+                .set("Authorization", `Bearer ${jwtToken}`)
+                .send({});
             expect(res.status).toBe(404);
             expect(res.header["content-type"]).toMatch(/json/);
         }));
@@ -93,18 +124,27 @@ describe("Test the Product Path", () => {
                 stock: 100,
             };
             // Create a new Product
-            const res = yield (0, supertest_1.default)(app_1.default).post("/products").send(newProduct);
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .post("/products")
+                .set("Authorization", `Bearer ${jwtToken}`)
+                .send(newProduct);
             // Delete said Product
-            const deleteRes = yield (0, supertest_1.default)(app_1.default).delete(`/products/${newProduct.p_id}`);
+            const deleteRes = yield (0, supertest_1.default)(app_1.default)
+                .delete(`/products/${newProduct.p_id}`)
+                .set("Authorization", `Bearer ${jwtToken}`);
             // Get said Product to check if it was deleted
-            const getRes = yield (0, supertest_1.default)(app_1.default).get(`/products/${newProduct.p_id}`);
+            const getRes = yield (0, supertest_1.default)(app_1.default)
+                .get(`/products/${newProduct.p_id}`)
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.status).toBe(201);
             expect(deleteRes.status).toBe(200);
             expect(deleteRes.header["content-type"]).toMatch(/json/);
             expect(getRes.status).toBe(404);
         }));
         it("should return 404 on product not found", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app_1.default).delete(`/products/p_id_not_found`);
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .delete(`/products/p_id_not_found`)
+                .set("Authorization", `Bearer ${jwtToken}`);
             expect(res.status).toBe(404);
             expect(res.header["content-type"]).toMatch(/json/);
         }));

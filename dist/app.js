@@ -10,6 +10,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
+const auth_1 = require("./middleware/auth");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3999;
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -36,7 +37,7 @@ app.get("/", (req, res) => {
     res.send("Hello World").sendStatus(200);
 });
 app.use("/auth", authRoutes_1.default);
+app.use(auth_1.auth);
 app.use("/products", productRoutes_1.default);
-// app.use(auth);
 app.use("/user", userRoutes_1.default);
 exports.default = app;

@@ -35,7 +35,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World").sendStatus(200);
 });
 app.use("/auth", authRoutes);
+app.use(auth);
 app.use("/products", productRoutes);
-// app.use(auth);
 app.use("/user", userRoutes);
 export default app;
