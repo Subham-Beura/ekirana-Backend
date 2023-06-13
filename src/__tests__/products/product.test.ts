@@ -2,7 +2,6 @@ import request from "supertest";
 import app from "../../app";
 import { returnRandomString } from "../../utlis/returnRandomString";
 import Product from "../../types/ProductType";
-import exp from "constants";
 describe("Test the Product Path", () => {
   describe("GET /products : Get all Products", () => {
     it("Get 200 Status code on success", async () => {
